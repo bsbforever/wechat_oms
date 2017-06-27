@@ -4,7 +4,7 @@ import smtplib
 import os
 import time
 from email.mime.text import MIMEText
-to_list=["<13913148443@139.com>"]
+to_list=["<13911111111@139.com>"]
 mail_host="10.65.1.134"  #设置服务器
 mail_user="ezio_shi"    #用户名
 mail_postfix="aseglobal.com"  #发件箱的后缀
