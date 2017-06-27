@@ -37,7 +37,7 @@ if __name__=="__main__":
             usage=int(i[4])
             if usage>=90:
                 tablespace=i[0]
-                mailcontent.append('Be Careful tablespace '+tablespace+' is '+str(usage)+' Used!')
+                mailcontent.append('Be Careful tablespace '+tablespace+' is '+str(usage)+'% Used!')
         #这里我们判断mailcontent长度是否为0，不为0说明有超过90%的表空间，然后我们发送邮件
         if len(mailcontent) != 0:
             content='\n'.join(mailcontent)
