@@ -16,7 +16,7 @@ if __name__=="__main__":
     
     ipaddress='10.65.1.120'
     username='sys'
-    password='ase_sys_n'
+    password='sys_password'
     port='1521'
     tnsname='dctest'
     #这里我们利用Python的异常处理来捕获异常，具体用法请参考文章开始提到的教程
