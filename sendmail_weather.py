@@ -4,11 +4,12 @@ import smtplib
 import os
 import time
 from email.mime.text import MIMEText
-to_list=["<ezio_shi@aseglobal.com>"]
-#to_list=["<1391111111@139.com>"]
+to_list=["<13913148443@139.com>","<18896551448@139.com>","<ezio_shi@aseglobal.com>"]
+#to_list=["<13913148443@139.com>","<ezio_shi@aseglobal.com>"]
+#to_list=["<ezio_shi@aseglobal.com>"]
 mail_host="10.65.1.134"  #设置服务器
-mail_user="ezio_shi"    #用户名
-mail_postfix="aseglobal.com"  #发件箱的后缀
+mail_user="weather_forecast"    #用户名
+mail_postfix="weather.com"  #发件箱的后缀
 def send_mail(to_list,sub,content):  #to_list：收件人；sub：主题；content：邮件内容
     me="<"+mail_user+"@"+mail_postfix+">"   #这里的hello可以任意设置，收到信后，将按照设置显示
     msg = MIMEText(content)    #创建一个实例，这里设置为html格式邮件
