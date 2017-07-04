@@ -12,6 +12,7 @@ dist
 build
 sendmail_bak.py
 push.sh
+sendmail_weather.py
 
 # My configurations:
 db.ini
