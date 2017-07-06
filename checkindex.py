@@ -14,18 +14,16 @@ def getindex(oracle_cursor):
     for i in row:
         result.append(i[0]+'.'+i[1])
     return result
-    #return row
 
 if __name__=="__main__":
     mailcontent=[] 
-    ipaddress='10.65.1.120'
+    ipaddress='10.60.14.70'
     username='sys'
-    password='ase_sys_n'
-    port='1521'
-    tnsname='dctest'
-    #这里我们利用Python的异常处理来捕获异常，具体用法请参考文章开始提到的教程
+    password='sys_password'
+    port='1527'
+    tnsname='NP1'
+    #首先获取v$sql_plan中的索引名称保存至变量data
     try:
-        #这里我们使用sysdba权限连接oracle数据库(和上期连接普通用户的不同)
         oracle = cx_Oracle.connect(username+'/'+password+'@'+ipaddress+':'+port+'/'+tnsname ,mode=cx_Oracle.SYSDBA)
     except Exception as e:
         content= (tnsname+' is Unreachable,The reason is '+ str(e)).strip()
@@ -35,14 +33,16 @@ if __name__=="__main__":
         data=getindex(oracle_cursor)
         oracle_cursor.close()
         oracle.close()
-
-     
+        #接下来连接本地MySQL数据库
         mysql = pymysql.connect("localhost","root","Oracle@123","oracle" )
         mysql_cursor = mysql.cursor()
+        #遍历每个索引
         for index in data:
-            checkifexist='select count(*) from oracle_indexmonitor where index_name=\''+index+'\''
+            #首先检查该索引是否存在于数据库中
+            checkifexist='select count(*) from oracle_indexmonitor where index_name=\''+index+'\' and ipaddress=\''+ipaddress+'\' and tnsname=\''+tnsname+'\''
             mysql_cursor.execute(checkifexist)
             count = mysql_cursor.fetchone()
+            #如结果等于0说明该索引未记录，则插入到MySQL数据库中
             if int(count[0])==0:
                 try:
                     insertsql='insert into oracle_indexmonitor(index_name,ipaddress,tnsname) values(\''+index+'\',\''+ipaddress+'\',\''+tnsname+'\')'
