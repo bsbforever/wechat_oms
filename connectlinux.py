@@ -26,8 +26,29 @@ def getlinuxcpu(ssh):
         print (e)
 
 
+
+def getlinuxmem(ssh):
+        result=[]
+        stdin,stdout,stderr=ssh.exec_command('free -m |awk \' NR==2 {print (($3 - $6 - $7)/$2)*100}\'')
+        err=stderr.readlines()
+        if len(err) != 0:
+            return err
+        else:
+            stdout_content=stdout.readlines()
+        result= stdout_content
+        try:
+            if  len(result) !=0:
+                return round(float(result[0].strip()),2)
+            else:
+                print ('There is something wrong when execute free command')
+        except Exception as se:
+            print (e)
+
+
+
+
 if __name__ == '__main__':
-    hostname='10.60.14.70'
+    hostname='10.65.202.201'
     username='root'
     #password='nstx147)'
     password='password'
@@ -38,8 +59,8 @@ if __name__ == '__main__':
         #连接目标服务器
         ssh.connect(hostname=hostname,port=22,username=username,password=password)
         #调用getlinuxcpu函数获得服务器CPU使用率
-        result=getlinuxcpu(ssh)
+        result=getlinuxmem(ssh)
         ssh.close()
-        print ('The CPU Utilization of '+hostname+' is '+ str(result)+'% Used')
+        print ('The Memory Utilization of '+hostname+' is '+ str(result)+'% Used')
     except Exception as e:
         print (hostname+' '+str(e))
