@@ -41,10 +41,25 @@ def getlinuxmem(ssh):
                 return round(float(result[0].strip()),2)
             else:
                 print ('There is something wrong when execute free command')
-        except Exception as se:
+        except Exception as e:
             print (e)
 
-
+def getlinuxspace(ssh):
+        result=[]
+        stdin,stdout,stderr=ssh.exec_command('df -h |awk \' NR>1 {if ($1==$NF){printf $1}else{print $0}}\'')
+        err=stderr.readlines()
+        if len(err) != 0:
+            print (err)
+        else:
+            stdout_content=stdout.readlines()
+        result= stdout_content
+        try:
+            if  len(result) !=0:
+                return result
+            else:
+                print ('There is something wrong when execute df command')
+        except Exception as e:
+            print (e)
 
 
 if __name__ == '__main__':
@@ -59,8 +74,13 @@ if __name__ == '__main__':
         #连接目标服务器
         ssh.connect(hostname=hostname,port=22,username=username,password=password)
         #调用getlinuxcpu函数获得服务器CPU使用率
-        result=getlinuxmem(ssh)
+        result=getlinuxspace(ssh)
         ssh.close()
-        print ('The Memory Utilization of '+hostname+' is '+ str(result)+'% Used')
+        for i in result:
+            j=i.split()
+            print ('The disk usage of '+j[5]+' on '+hostname+' is '+j[4][0:-1]+'% Used')
     except Exception as e:
         print (hostname+' '+str(e))
+
+
+
