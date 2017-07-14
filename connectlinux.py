@@ -12,7 +12,8 @@ def getlinuxcpu(ssh):
     #我们首先判断有无错误，如果没有则读出命令结果
     err=stderr.readlines() 
     if len(err) != 0:
-        return err
+        print (err)
+        return False
     else:
         stdout_content=stdout.readlines()
     result= stdout_content
@@ -32,7 +33,8 @@ def getlinuxmem(ssh):
         stdin,stdout,stderr=ssh.exec_command('free -m |awk \' NR==2 {print (($3 - $6 - $7)/$2)*100}\'')
         err=stderr.readlines()
         if len(err) != 0:
-            return err
+            print (err)
+            return False
         else:
             stdout_content=stdout.readlines()
         result= stdout_content
@@ -50,6 +52,7 @@ def getlinuxspace(ssh):
         err=stderr.readlines()
         if len(err) != 0:
             print (err)
+            return False
         else:
             stdout_content=stdout.readlines()
         result= stdout_content
@@ -65,7 +68,6 @@ def getlinuxspace(ssh):
 if __name__ == '__main__':
     hostname='10.65.202.201'
     username='root'
-    #password='nstx147)'
     password='password'
     try:
         #使用SSHClient方法定义ssh变量
@@ -76,9 +78,10 @@ if __name__ == '__main__':
         #调用getlinuxcpu函数获得服务器CPU使用率
         result=getlinuxspace(ssh)
         ssh.close()
-        for i in result:
-            j=i.split()
-            print ('The disk usage of '+j[5]+' on '+hostname+' is '+j[4][0:-1]+'% Used')
+        if result:
+            for i in result:
+                j=i.split()
+                print ('The disk usage of '+j[5]+' on '+hostname+' is '+j[4][0:-1]+'% Used')
     except Exception as e:
         print (hostname+' '+str(e))
 
